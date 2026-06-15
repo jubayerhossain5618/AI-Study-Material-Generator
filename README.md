@@ -81,7 +81,10 @@ This project is being developed as a semester-long AI-based software engineering
 
 ## AI Integration
 - Gemini API / OpenAI API
-
+  
+## Authentication
+- JWT
+  
 ## Deployment
 - Vercel
 - Render
