@@ -137,7 +137,6 @@ AI-Study-Material-Generator/
 │
 ├── frontend/          # React frontend application
 ├── backend/           # Node.js backend APIs
-├── ai-module/         # AI processing and integration
 ├── database/          # Database schema and scripts
 ├── documentation/     # SRS, System Design, Reports
 ├── diagrams/          # UML and architecture diagrams
