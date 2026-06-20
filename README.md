@@ -20,10 +20,10 @@ An AI-powered educational platform that automatically generates study materials 
 
 | Name                 | Student ID     | Role        |
 | ------------------   | ----------     | ----------- |
-| [Md.Jubayer Hossain] |[11230121152]   | Team Leader |
-| [Zemima Khan jimu]   | [11230121144]  | Member      |
-| [Orin Khan Joty]     | [11230121147]  | Member      |
-| [Rafiuzzaman Rafi]   | [11230121154]  | Member      |
+| Md.Jubayer Hossain   |11230121152     | Team Leader |
+| Zemima Khan jimu     | 11230121144    | Member      |
+| Orin Khan Joty       | 11230121147    | Member      |
+| Rafiuzzaman Rafi     | 11230121154    | Member      |
 
 ---
 
@@ -125,6 +125,7 @@ Backend API (Node.js + Express.js)
 
 * Draw.io
 * DBDiagram.io
+* Figma
 * GitHub
 
 ---
