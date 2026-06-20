@@ -1,162 +1,240 @@
-# 📚 AI Study Material Generator
+# AI Study Material Generator
 
-An AI-powered educational platform that automatically generates smart study materials such as summaries, MCQs, quizzes, flashcards, and important questions from uploaded lecture notes, PDFs, and study documents.
-
----
-
-# 🚀 Project Overview
-
-Students often spend a lot of time preparing study materials manually from lecture slides, notes, and textbooks. This project aims to simplify and improve the learning process using Artificial Intelligence.
-
-The system analyzes uploaded educational content and automatically generates:
-- Smart summaries
-- Short notes
-- MCQs
-- Flashcards
-- Quiz questions
-- Important questions
-
-This project is being developed as a semester-long AI-based software engineering project.
+An AI-powered educational platform that automatically generates study materials from uploaded documents. The system helps students save time and improve learning efficiency by generating summaries, quizzes, flashcards, MCQs, and providing AI chatbot assistance.
 
 ---
 
-# 🎯 Objectives
+## 📌 Project Information
 
-- Build an AI-powered study assistant
-- Generate intelligent study materials automatically
-- Improve student productivity and learning efficiency
-- Provide personalized educational support
-- Reduce manual study preparation time
+**Project Title:** AI Study Material Generator
 
----
+**Course:** CSE4104 – Software Development III
 
-# ✨ Proposed Features
+**Team Name:** CSE4104-7C-T03
 
-## 🔐 Authentication System
-- User registration and login
-- Secure authentication system
-
-## 📄 File Upload System
-- Upload PDFs, lecture slides, and notes
-- Store uploaded documents
-
-## 🤖 AI Study Material Generator
-- AI-generated summaries
-- Automatic note generation
-- Important topic extraction
-
-## ❓ MCQ & Quiz Generator
-- Generate MCQs automatically
-- Create quiz sets from uploaded content
-
-## 🧠 Flashcard Generator
-- Smart flashcards for revision
-- Quick memorization support
-
-## 💬 AI Chatbot Assistant
-- Answer student questions
-- Provide study guidance
-
-## 📊 Dashboard
-- Manage uploaded files
-- View generated materials
-- Track study progress
+**Section:** 7C
 
 ---
 
-# 🛠️ Technology Stack
+## 👥 Team Information
 
-## Frontend
-- HTML
-- CSS
-- JavaScript
-- React.js
-
-## Backend
-- Node.js
-- Express.js
-
-## Database
-- MongoDB
-
-## AI Integration
-- Gemini API / OpenAI API
-  
-## Authentication
-- JWT
-  
-## Deployment
-- Vercel
-- Render
+| Name                 | Student ID     | Role        |
+| ------------------   | ----------     | ----------- |
+| [Md.Jubayer Hossain] |[11230121152]   | Team Leader |
+| [Zemima Khan jimu]   | [11230121144]  | Member      |
+| [Orin Khan Joty]     | [11230121147]  | Member      |
+| [Rafiuzzaman Rafi]   | [11230121154]  | Member      |
 
 ---
 
-# 🧩 Project Structure
+## 📖 Project Description
 
-```bash
-AI-Study-Material-Generator/
-│
-├── frontend/
-│
-├── backend/
-│
-├── ai-module/
-│
-├── database/
-│
-├── docs/
-│
-└── README.md
+Students often spend significant time creating notes, summaries, flashcards, and practice questions manually. Existing learning platforms provide limited automation and personalization.
+
+The AI Study Material Generator solves this problem by allowing students to upload study materials and automatically generate:
+
+* Summaries
+* Multiple Choice Questions (MCQs)
+* Flashcards
+* Quizzes
+* AI-powered chatbot responses
+
+This system enhances learning efficiency and reduces the time required for exam preparation.
+
+---
+
+## 🎯 Objectives
+
+* Automate study material generation.
+* Reduce manual note-taking effort.
+* Improve student productivity.
+* Provide AI-assisted learning support.
+* Generate personalized learning resources.
+
+---
+
+## ✨ Features
+
+### User Features
+
+* User Registration
+* User Login & Authentication
+* Profile Management
+* Upload Study Documents
+* Download Generated Materials
+
+### AI Features
+
+* AI Summary Generator
+* AI MCQ Generator
+* AI Flashcard Generator
+* AI Quiz Generator
+* AI Chatbot Assistance
+
+### Admin Features
+
+* Manage Users
+* Manage Documents
+* Monitor System Activities
+
+---
+
+## 🏗️ System Architecture
+
+```text
+Student/User
+      │
+      ▼
+Frontend (React.js)
+      │
+      ▼
+Backend API (Node.js + Express.js)
+      │
+      ├────────► MongoDB Database
+      │
+      └────────► OpenAI API 
 ```
 
 ---
 
+## 🛠️ Technology Stack
+
+### Frontend
+* HTML
+* React.js
+* Tailwind CSS
+* JavaScript
+  
+
+### Backend
+
+* Node.js
+* Express.js
+* JWT Authentication
+
+### Database
+
+* MongoDB
+
+### AI Integration
+
+* OpenAI API 
 
 
-# 📌 Problem Statement
+### Tools
 
-Students struggle to organize study materials and prepare effective notes manually. Existing systems lack intelligent automation, personalized learning support, and AI-powered content generation.
-
-This project solves the problem by using Artificial Intelligence and Natural Language Processing (NLP) to generate study resources automatically from educational content.
-
----
-
-# 🎯 Expected Outcome
-
-The expected outcome of this project is to develop an intelligent educational assistant that:
-- Saves students’ study time
-- Improves revision efficiency
-- Generates personalized learning materials
-- Enhances learning productivity
-- Provides smart AI-based educational support
-
----
-
-# 🔮 Future Improvements
-
-- Voice-based AI assistant
-- Multi-language support
-- Mobile application
-- AI-based performance tracking
-- Personalized learning recommendations
-
----
-
-# 📚 Research & References
-
-- OpenAI API Documentation
-- Gemini API Documentation
-- GitHub AI Education Projects
-- Research Papers on NLP & AI Education Systems
+* Draw.io
+* DBDiagram.io
+* GitHub
 
 ---
 
-# 📄 License
+## 📂 Repository Structure
 
-This project is developed for educational purposes under the Software Development Project course.
+```text
+AI-Study-Material-Generator/
+│
+├── frontend/          # React frontend application
+├── backend/           # Node.js backend APIs
+├── ai-module/         # AI processing and integration
+├── database/          # Database schema and scripts
+├── documentation/     # SRS, System Design, Reports
+├── diagrams/          # UML and architecture diagrams
+├── docs/              # Additional project documents
+├── README.md
+│
+└── .gitignore
+```
 
 ---
 
-# ⭐ Repository Status
+## 🔌 Planned API Endpoints
 
-🚧 Initial Project Planning Phase
+### Authentication APIs
+
+```http
+POST /api/auth/register
+POST /api/auth/login
+POST /api/auth/logout
+```
+
+### User APIs
+
+```http
+GET /api/user/profile
+PUT /api/user/profile
+```
+
+### Document APIs
+
+```http
+POST /api/documents/upload
+GET /api/documents
+DELETE /api/documents/:id
+```
+
+### AI APIs
+
+```http
+POST /api/ai/summary
+POST /api/ai/mcq
+POST /api/ai/flashcards
+POST /api/ai/quiz
+POST /api/ai/chat
+```
+
+---
+
+## 🤖 AI Integration Workflow
+
+```text
+User Uploads Document
+            │
+            ▼
+Backend Extracts Text
+            │
+            ▼
+OpenAI / Gemini API
+            │
+            ▼
+AI Processes Content
+            │
+            ▼
+Generate:
+• Summary
+• MCQs
+• Flashcards
+• Quiz Questions
+            │
+            ▼
+Store Results in Database
+            │
+            ▼
+Display Results to User
+```
+
+---
+
+## 📚 References
+
+* OpenAI API Documentation
+* Google Gemini API Documentation
+* React.js Documentation
+* Node.js Documentation
+* Express.js Documentation
+* MongoDB Documentation
+
+---
+
+## 📄 License
+
+This project is developed for academic purposes as part of the CSE4104 – Software Development III course.
+
+---
+
+## ⭐ Project Status
+
+**Current Phase:** UI/UX Design and Development Planning
+
+**Development Status:** In Progress 🚧
+
