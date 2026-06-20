@@ -213,16 +213,7 @@ Store Results in Database
 Display Results to User
 ```
 
----
 
-## 📚 References
-
-* OpenAI API Documentation
-* Google Gemini API Documentation
-* React.js Documentation
-* Node.js Documentation
-* Express.js Documentation
-* MongoDB Documentation
 
 ---
 
