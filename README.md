@@ -76,6 +76,7 @@ This system enhances learning efficiency and reduces the time required for exam 
 * Manage Users
 * Manage Documents
 * Monitor System Activities
+* View Reports and Statistics
 
 ---
 
@@ -94,7 +95,25 @@ Backend API (Node.js + Express.js)
       │
       └────────► OpenAI API 
 ```
+##🧭 User Flow
 
+User Visits Website
+        ↓
+Register / Login
+        ↓
+Dashboard
+        ↓
+Upload Document
+        ↓
+Select Material Type
+        ↓
+AI Processing
+        ↓
+View Results
+        ↓
+Download Materials
+        ↓
+Logout
 ---
 
 ## 🛠️ Technology Stack
@@ -140,7 +159,6 @@ AI-Study-Material-Generator/
 ├── database/          # Database schema and scripts
 ├── documentation/     # SRS, System Design, Reports
 ├── diagrams/          # UML and architecture diagrams
-├── docs/              # Additional project documents
 ├── README.md
 │
 └── .gitignore
