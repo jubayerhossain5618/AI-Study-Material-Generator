@@ -243,7 +243,7 @@ This project is developed for academic purposes as part of the CSE4104 – Softw
 
 ## ⭐ Project Status
 
-**Current Phase:** UI/UX Design and Development Planning
+**Current Phase:** Backend development 
 
 **Development Status:** In Progress 🚧
 
