@@ -95,26 +95,7 @@ Backend API (Node.js + Express.js)
       │
       └────────► OpenAI API 
 ```
-##🧭 User Flow
 
-User Visits Website
-        ↓
-Register / Login
-        ↓
-Dashboard
-        ↓
-Upload Document
-        ↓
-Select Material Type
-        ↓
-AI Processing
-        ↓
-View Results
-        ↓
-Download Materials
-        ↓
-Logout
----
 
 ## 🛠️ Technology Stack
 
