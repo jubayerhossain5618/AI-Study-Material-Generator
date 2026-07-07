@@ -224,7 +224,7 @@ This project is developed for academic purposes as part of the CSE4104 – Softw
 
 ## ⭐ Project Status
 
-**Current Phase:** Backend development 
+**Current Phase:** Frontend development 
 
 **Development Status:** In Progress 🚧
 
