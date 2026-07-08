@@ -7,7 +7,7 @@ const ChatHistory =
 
 const {
     askQuestion
-} = require("../services/aiService");
+} = require("../services/aiServices");
 
 
 // Ask Question

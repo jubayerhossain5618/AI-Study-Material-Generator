@@ -1,76 +1,60 @@
 // generateSummary, generateMCQ, generateFlashcards, generateQuiz
-const Document =
-    require("../models/Document");
+const Document = require("../models/Document");
 
-const Material =
-    require("../models/Material");
+const Material = require("../models/Material");
 
 const {
-    generateContent
-} = require("../services/aiService");
+  generateContent
+} = require("../services/aiServices");
 
 
 // Generate Summary
+exports.generateSummary = async (req, res) => {
+  try {
+    const document = await Document.findById(req.params.id);
 
-exports.generateSummary =
-    async (req, res) => {
+    if (!document) {
+      return res.status(404).json({
+        message: "Document not found"
+      });
+    }
 
-    try {
-
-        const document =
-            await Document.findById(
-                req.params.id
-            );
-
-        if (!document)
-            return res.status(404).json({
-                message: "Document not found"
-            });
-
-        const prompt = `
+    const prompt = `
 Summarize the following study material:
 
 ${document.extractedText}
 `;
 
-        const summary =
-            await generateContent(prompt);
+    const summary = await generateContent(prompt);
 
-        const saved =
-            await Material.create({
+    const saved = await Material.create({
+      documentId: document._id,
+      userId: req.user.id,
+      materialType: "summary",
+      content: summary
+    });
 
-                documentId: document._id,
-
-                userId: req.user.id,
-
-                materialType: "summary",
-
-                content: summary
-            });
-
-        res.json(saved);
-
-    } catch (error) {
-
-        res.status(500).json({
-            message: error.message
-        });
-    }
+    res.json(saved);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    });
+  }
 };
 
-//get mcq
 
-exports.generateMCQ =
-    async (req, res) => {
+// Generate MCQ
+exports.generateMCQ = async (req, res) => {
+  try {
+    const document = await Document.findById(req.params.id);
 
-    try {
+    if (!document) {
+      return res.status(404).json({
+        message: "Document not found"
+      });
+    }
 
-        const document =
-            await Document.findById(
-                req.params.id
-            );
-
-        const prompt = `
+    const prompt = `
 Generate 10 multiple choice questions.
 
 Text:
@@ -87,43 +71,36 @@ D)
 Answer:
 `;
 
-        const mcqs =
-            await generateContent(prompt);
+    const mcqs = await generateContent(prompt);
 
-        const saved =
-            await Material.create({
+    const saved = await Material.create({
+      documentId: document._id,
+      userId: req.user.id,
+      materialType: "mcq",
+      content: mcqs
+    });
 
-                documentId: document._id,
-
-                userId: req.user.id,
-
-                materialType: "mcq",
-
-                content: mcqs
-            });
-
-        res.json(saved);
-
-    } catch (error) {
-
-        res.status(500).json({
-            message: error.message
-        });
-    }
+    res.json(saved);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    });
+  }
 };
 
-//get flash card
-exports.generateFlashcards =
-    async (req, res) => {
 
-    try {
+// Generate Flashcards
+exports.generateFlashcards = async (req, res) => {
+  try {
+    const document = await Document.findById(req.params.id);
 
-        const document =
-            await Document.findById(
-                req.params.id
-            );
+    if (!document) {
+      return res.status(404).json({
+        message: "Document not found"
+      });
+    }
 
-        const prompt = `
+    const prompt = `
 Create flashcards.
 
 Format:
@@ -136,81 +113,64 @@ Text:
 ${document.extractedText}
 `;
 
-        const flashcards =
-            await generateContent(prompt);
+    const flashcards = await generateContent(prompt);
 
-        const saved =
-            await Material.create({
+    const saved = await Material.create({
+      documentId: document._id,
+      userId: req.user.id,
+      materialType: "flashcard",
+      content: flashcards
+    });
 
-                documentId: document._id,
-
-                userId: req.user.id,
-
-                materialType: "flashcard",
-
-                content: flashcards
-            });
-
-        res.json(saved);
-
-    } catch (error) {
-
-        res.status(500).json({
-            message: error.message
-        });
-    }
+    res.json(saved);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    });
+  }
 };
 
-//generate quiz
-exports.generateQuiz =
-    async (req, res) => {
 
-    try {
+// Generate Quiz
+exports.generateQuiz = async (req, res) => {
+  try {
+    const document = await Document.findById(req.params.id);
 
-        const document =
-            await Document.findById(
-                req.params.id
-            );
+    if (!document) {
+      return res.status(404).json({
+        message: "Document not found"
+      });
+    }
 
-        const prompt = `
+    const prompt = `
 Create a short quiz from:
 
 ${document.extractedText}
 `;
 
-        const quiz =
-            await generateContent(prompt);
+    const quiz = await generateContent(prompt);
 
-        const saved =
-            await Material.create({
+    const saved = await Material.create({
+      documentId: document._id,
+      userId: req.user.id,
+      materialType: "quiz",
+      content: quiz
+    });
 
-                documentId: document._id,
-
-                userId: req.user.id,
-
-                materialType: "quiz",
-
-                content: quiz
-            });
-
-        res.json(saved);
-
-    } catch (error) {
-
-        res.status(500).json({
-            message: error.message
-        });
-    }
+    res.json(saved);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    });
+  }
 };
 
-//metarials
-exports.getMaterials =
-    async (req, res) => {
 
-    const materials =
-        await Material.find({
-            userId: req.user.id
-        });
+// Get Materials
+exports.getMaterials = async (req, res) => {
+  const materials = await Material.find({
+    userId: req.user.id
+  });
 
-    res.json(materials);
+  res.json(materials);
 };
