@@ -1,105 +1,144 @@
-// askAI, getChatHistory, deleteChat
-const Document =
-    require("../models/Document");
-
-const ChatHistory =
-    require("../models/ChatHistory");
+const Document = require("../models/Document");
+const ChatHistory = require("../models/ChatHistory");
 
 const {
-    askQuestion
+  askQuestion
 } = require("../services/aiServices");
 
 
-// Ask Question
+// ==============================
+// Ask AI Tutor
+// ==============================
 
-exports.askAI =
-    async (req, res) => {
+exports.askAI = async (req, res) => {
 
-    try {
+  try {
 
-        const { question } = req.body;
+    const { question } = req.body;
 
-        const document =
-            await Document.findById(
-                req.params.documentId
-            );
-
-        if (!document) {
-
-            return res.status(404).json({
-                message: "Document not found"
-            });
-        }
-
-        const answer =
-            await askQuestion(
-                document.extractedText,
-                question
-            );
-
-        const chat =
-            await ChatHistory.create({
-
-                userId: req.user.id,
-
-                documentId:
-                    document._id,
-
-                question,
-
-                answer
-            });
-
-        res.json(chat);
-
-    } catch (error) {
-
-        res.status(500).json({
-            message: error.message
-        });
+    if (!question || !question.trim()) {
+      return res.status(400).json({
+        message: "Question is required."
+      });
     }
+
+    // Only allow logged-in user's own document
+    const document = await Document.findOne({
+      _id: req.params.documentId,
+      userId: req.user.id
+    });
+
+    if (!document) {
+      return res.status(404).json({
+        message: "Document not found."
+      });
+    }
+
+    if (
+      !document.extractedText ||
+      !document.extractedText.trim()
+    ) {
+      return res.status(400).json({
+        message:
+          "No readable text found in this document. Please upload a text-based PDF, DOCX or TXT file."
+      });
+    }
+
+    const answer = await askQuestion(
+      document.extractedText,
+      question.trim()
+    );
+
+    if (!answer || !answer.trim()) {
+      return res.status(502).json({
+        message: "AI returned an empty answer."
+      });
+    }
+
+    const chat = await ChatHistory.create({
+      userId: req.user.id,
+      documentId: document._id,
+      question: question.trim(),
+      answer
+    });
+
+    res.json(chat);
+
+  } catch (error) {
+
+    console.error("AI Tutor Error:", error);
+
+    res.status(500).json({
+      message:
+        error.message ||
+        "AI Tutor is temporarily unavailable."
+    });
+
+  }
 };
 
-exports.getChatHistory =
-    async (req, res) => {
 
-    try {
+// ==============================
+// Get Chat History
+// ==============================
 
-        const history =
-            await ChatHistory.find({
-                userId: req.user.id
-            })
-            .sort({ createdAt: -1 });
+exports.getChatHistory = async (req, res) => {
 
-        res.json(history);
+  try {
 
-    } catch (error) {
+    const history = await ChatHistory.find({
+      userId: req.user.id
+    })
+    .sort({
+      createdAt: -1
+    });
 
-        res.status(500).json({
-            message: error.message
-        });
-    }
+    res.json(history);
+
+  } catch (error) {
+
+    res.status(500).json({
+      message:
+        error.message ||
+        "Unable to load chat history."
+    });
+
+  }
 };
 
-//delete
-exports.deleteChat =
-    async (req, res) => {
 
-    try {
+// ==============================
+// Delete Chat
+// ==============================
 
-        await ChatHistory.findByIdAndDelete(
-            req.params.id
-        );
+exports.deleteChat = async (req, res) => {
 
-        res.json({
-            message:
-                "Chat deleted successfully"
-        });
+  try {
 
-    } catch (error) {
+    const chat = await ChatHistory.findOne({
+      _id: req.params.id,
+      userId: req.user.id
+    });
 
-        res.status(500).json({
-            message: error.message
-        });
+    if (!chat) {
+      return res.status(404).json({
+        message: "Chat not found."
+      });
     }
+
+    await chat.deleteOne();
+
+    res.json({
+      message: "Chat deleted successfully."
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+      message:
+        error.message ||
+        "Unable to delete chat."
+    });
+
+  }
 };

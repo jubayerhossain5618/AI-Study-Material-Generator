@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Environment secrets
+.env
+.env.*
+
+# Keep environment example
+!.env.example
+
+# Build output
+dist/
+
+# Uploaded files
+uploads/
+
+# Old/backup frontend
+frontend-old/
+
+# OS files
+.DS_Store
+Thumbs.db

@@ -9,6 +9,7 @@ import Profile from "./pages/Profile";
 import Summary from "./pages/Summary";
 import MCQ from "./pages/MCQ";
 import Flashcards from "./pages/Flashcards";
+import Chatbot from "./pages/Chatbot";
 
 function ProtectedRoute({ children }) {
   const token = localStorage.getItem("token");
@@ -79,6 +80,15 @@ function App() {
           element={
             <ProtectedRoute>
               <Flashcards />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/chatbot"
+          element={
+            <ProtectedRoute>
+              <Chatbot />
             </ProtectedRoute>
           }
         />

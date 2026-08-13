@@ -1,124 +1,292 @@
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 function Dashboard() {
   const navigate = useNavigate();
 
-  const handleLogout = () => {
+  const [documents, setDocuments] = useState([]);
+  const [materials, setMaterials] = useState([]);
+
+  useEffect(() => {
+    const loadDashboard = async () => {
+      const token = localStorage.getItem("token");
+
+      try {
+        const [documentsResponse, materialsResponse] = await Promise.all([
+          fetch("http://localhost:5000/api/documents", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }),
+
+          fetch("http://localhost:5000/api/ai/materials", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }),
+        ]);
+
+        const documentsData = await documentsResponse.json();
+        const materialsData = await materialsResponse.json();
+
+        if (documentsResponse.ok) {
+          setDocuments(documentsData);
+        }
+
+        if (materialsResponse.ok) {
+          setMaterials(materialsData);
+        }
+      } catch (error) {
+        console.error("Dashboard loading error:", error);
+      }
+    };
+
+    loadDashboard();
+  }, []);
+
+  const summaries = materials.filter(
+    (item) => item.materialType === "summary"
+  ).length;
+
+  const mcqs = materials.filter(
+    (item) => item.materialType === "mcq"
+  ).length;
+
+  const flashcards = materials.filter(
+    (item) => item.materialType === "flashcard"
+  ).length;
+
+  const logout = () => {
     localStorage.removeItem("token");
     navigate("/login");
   };
 
   return (
     <div className="dashboard">
+
+      {/* SIDEBAR */}
       <aside className="sidebar">
+
         <h2>⚡ StudyGen</h2>
 
         <nav>
-          <Link to="/dashboard">🏠 Dashboard</Link>
-          <Link to="/upload">📤 Upload</Link>
-          <Link to="/summary">📄 Summary</Link>
-          <Link to="/mcq">✅ MCQ</Link>
-          <Link to="/flashcards">🧠 Flashcards</Link>
-          <Link to="/profile">👤 Profile</Link>
+          <Link to="/dashboard">
+            🏠 Dashboard
+          </Link>
 
-          <button className="logout-btn" onClick={handleLogout}>
+          <Link to="/upload">
+            📤 Upload
+          </Link>
+
+          <Link to="/summary">
+            📄 Summary
+          </Link>
+
+          <Link to="/mcq">
+            ✅ MCQ
+          </Link>
+
+          <Link to="/flashcards">
+            🧠 Flashcards
+          </Link>
+
+          <Link to="/chatbot">
+            🤖 AI Tutor
+          </Link>
+
+          <Link to="/profile">
+            👤 Profile
+          </Link>
+
+          <button
+            className="logout-btn"
+            onClick={logout}
+          >
             🚪 Logout
           </button>
         </nav>
+
       </aside>
 
+
+      {/* MAIN DASHBOARD */}
       <main className="dashboard-main">
+
         <div className="topbar">
           <div>
             <h1>Welcome Back 👋</h1>
-            <p>Generate and manage your AI study materials.</p>
+            <p>
+              Generate and manage your AI study materials.
+            </p>
           </div>
 
-          <input type="text" placeholder="Search notes, files, topics..." />
+          <input
+            type="text"
+            placeholder="Search notes, files, topics..."
+          />
         </div>
 
-        <section className="stats-grid">
+
+        {/* STATISTICS */}
+        <div className="stats-grid">
+
           <div className="stat-card">
-            <h3>🔥 24</h3>
+            <h2>📁 {documents.length}</h2>
             <p>Total Files</p>
-            <small>+3 this week</small>
           </div>
 
           <div className="stat-card">
-            <h3>📄 18</h3>
+            <h2>📄 {summaries}</h2>
             <p>Summaries</p>
-            <small>AI generated</small>
           </div>
 
           <div className="stat-card">
-            <h3>🧠 120</h3>
-            <p>MCQs Generated</p>
-            <small>Practice mode</small>
+            <h2>🧠 {mcqs}</h2>
+            <p>MCQ Sets</p>
           </div>
 
           <div className="stat-card">
-            <h3>🗂 45</h3>
-            <p>Flashcards</p>
-            <small>Revision ready</small>
+            <h2>🗂️ {flashcards}</h2>
+            <p>Flashcard Sets</p>
           </div>
-        </section>
 
-        <section className="quick-actions">
+        </div>
+
+
+        {/* QUICK ACTIONS */}
+        <div>
           <h2>⚡ Quick Actions</h2>
 
           <div className="action-grid">
-            <Link to="/upload">📤 Upload File</Link>
-            <Link to="/summary">📄 Generate Summary</Link>
-            <Link to="/mcq">🧠 Create MCQ</Link>
-            <Link to="/flashcards">🗂 Flashcards</Link>
-          </div>
-        </section>
 
-        <section className="upload-panel">
+            <Link to="/upload">
+              📤 Upload File
+            </Link>
+
+            <Link to="/summary">
+              📄 Generate Summary
+            </Link>
+
+            <Link to="/mcq">
+              🧠 Create MCQ
+            </Link>
+
+            <Link to="/flashcards">
+              🗂️ Flashcards
+            </Link>
+
+            <Link to="/chatbot">
+              🤖 AI Tutor
+            </Link>
+
+          </div>
+        </div>
+
+
+        {/* UPLOAD */}
+        <div className="upload-panel">
+
           <div>
             <h2>Upload Study Material</h2>
-            <p>Upload PDF, DOCX or TXT files to generate AI notes.</p>
+
+            <p>
+              Upload PDF, DOCX or TXT files to generate AI study materials.
+            </p>
           </div>
 
-          <Link to="/upload" className="upload-btn">
+          <Link
+            to="/upload"
+            className="upload-btn"
+          >
             Upload Now
           </Link>
-        </section>
 
-        <section className="recent-files">
+        </div>
+
+
+        {/* AI FEATURES */}
+        <div className="tool-grid">
+
+          <Link
+            to="/summary"
+            className="tool-card"
+          >
+            <h2>📄 Summary</h2>
+            <p>
+              Generate AI summaries from your uploaded study material.
+            </p>
+          </Link>
+
+          <Link
+            to="/mcq"
+            className="tool-card"
+          >
+            <h2>🧠 MCQ Generator</h2>
+            <p>
+              Generate practice questions automatically.
+            </p>
+          </Link>
+
+          <Link
+            to="/flashcards"
+            className="tool-card"
+          >
+            <h2>🗂️ Flashcards</h2>
+            <p>
+              Create quick revision flashcards.
+            </p>
+          </Link>
+
+          <Link
+            to="/chatbot"
+            className="tool-card"
+          >
+            <h2>🤖 AI Tutor</h2>
+            <p>
+              Ask questions from your uploaded study material.
+            </p>
+          </Link>
+
+        </div>
+
+
+        {/* RECENT FILES */}
+        <div className="recent-files">
+
           <h2>📁 Recent Files</h2>
 
-          <div className="file-row">
-            <span>📘 Physics Chapter 01.pdf</span>
-            <button>View</button>
-          </div>
+          {documents.length === 0 ? (
 
-          <div className="file-row">
-            <span>📗 Chemistry Notes.docx</span>
-            <button>View</button>
-          </div>
+            <p>No documents uploaded yet.</p>
 
-          <div className="file-row">
-            <span>📙 Math Formula Sheet.pdf</span>
-            <button>View</button>
-          </div>
-        </section>
+          ) : (
 
-        <section className="ai-tip">
-          <h3>🤖 AI Tip of the Day</h3>
-          <p>Study in short sessions (25 mins) for better memory retention.</p>
-        </section>
+            documents
+              .slice(-5)
+              .reverse()
+              .map((doc) => (
 
-        <section className="progress-section">
-          <h2>📊 Weekly Progress</h2>
+                <div
+                  className="file-row"
+                  key={doc._id}
+                >
+                  <span>
+                    📄 {doc.fileName}
+                  </span>
 
-          <div className="progress-bar">
-            <div className="progress-fill" style={{ width: "70%" }}></div>
-          </div>
+                  <Link to="/summary">
+                    Use with AI
+                  </Link>
+                </div>
 
-          <p>70% of weekly study goal completed</p>
-        </section>
+              ))
+
+          )}
+
+        </div>
+
       </main>
+
     </div>
   );
 }
