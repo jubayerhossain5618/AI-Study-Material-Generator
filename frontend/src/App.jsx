@@ -1,4 +1,10 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -10,6 +16,9 @@ import Summary from "./pages/Summary";
 import MCQ from "./pages/MCQ";
 import Flashcards from "./pages/Flashcards";
 import Chatbot from "./pages/Chatbot";
+import Quiz from "./pages/Quiz";
+import AdminDashboard from "./pages/AdminDashboard";
+
 
 function ProtectedRoute({ children }) {
   const token = localStorage.getItem("token");
@@ -21,14 +30,84 @@ function ProtectedRoute({ children }) {
   return children;
 }
 
+
+function AdminRoute({ children }) {
+  const token = localStorage.getItem("token");
+
+  const [checking, setChecking] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    const checkAdmin = async () => {
+      if (!token) {
+        setChecking(false);
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          "http://localhost:5000/api/auth/profile",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const data = await response.json();
+
+        if (response.ok && data.role === "admin") {
+          setIsAdmin(true);
+        } else {
+          setIsAdmin(false);
+        }
+      } catch (error) {
+        console.error("Admin access check error:", error);
+        setIsAdmin(false);
+      } finally {
+        setChecking(false);
+      }
+    };
+
+    checkAdmin();
+  }, [token]);
+
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (checking) {
+    return <p>Checking admin access...</p>;
+  }
+
+  if (!isAdmin) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return children;
+}
+
+
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
 
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route
+          path="/"
+          element={<Home />}
+        />
+
+        <Route
+          path="/login"
+          element={<Login />}
+        />
+
+        <Route
+          path="/register"
+          element={<Register />}
+        />
+
 
         <Route
           path="/dashboard"
@@ -39,6 +118,7 @@ function App() {
           }
         />
 
+
         <Route
           path="/upload"
           element={
@@ -47,6 +127,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+
 
         <Route
           path="/profile"
@@ -57,6 +138,7 @@ function App() {
           }
         />
 
+
         <Route
           path="/summary"
           element={
@@ -65,6 +147,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+
 
         <Route
           path="/mcq"
@@ -75,6 +158,7 @@ function App() {
           }
         />
 
+
         <Route
           path="/flashcards"
           element={
@@ -84,6 +168,17 @@ function App() {
           }
         />
 
+
+        <Route
+          path="/quiz"
+          element={
+            <ProtectedRoute>
+              <Quiz />
+            </ProtectedRoute>
+          }
+        />
+
+
         <Route
           path="/chatbot"
           element={
@@ -92,6 +187,17 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute>
+              <AdminDashboard />
+            </AdminRoute>
+          }
+        />
+
       </Routes>
     </BrowserRouter>
   );

@@ -6,13 +6,17 @@ function Dashboard() {
 
   const [documents, setDocuments] = useState([]);
   const [materials, setMaterials] = useState([]);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     const loadDashboard = async () => {
       const token = localStorage.getItem("token");
 
       try {
-        const [documentsResponse, materialsResponse] = await Promise.all([
+        const [
+          documentsResponse,
+          materialsResponse,
+        ] = await Promise.all([
           fetch("http://localhost:5000/api/documents", {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -26,8 +30,11 @@ function Dashboard() {
           }),
         ]);
 
-        const documentsData = await documentsResponse.json();
-        const materialsData = await materialsResponse.json();
+        const documentsData =
+          await documentsResponse.json();
+
+        const materialsData =
+          await materialsResponse.json();
 
         if (documentsResponse.ok) {
           setDocuments(documentsData);
@@ -36,40 +43,77 @@ function Dashboard() {
         if (materialsResponse.ok) {
           setMaterials(materialsData);
         }
+
       } catch (error) {
-        console.error("Dashboard loading error:", error);
+        console.error(
+          "Dashboard loading error:",
+          error
+        );
       }
     };
 
     loadDashboard();
   }, []);
 
+
+  // =========================
+  // MATERIAL COUNTS
+  // =========================
+
   const summaries = materials.filter(
-    (item) => item.materialType === "summary"
+    (item) =>
+      item.materialType === "summary"
   ).length;
 
   const mcqs = materials.filter(
-    (item) => item.materialType === "mcq"
+    (item) =>
+      item.materialType === "mcq"
   ).length;
 
   const flashcards = materials.filter(
-    (item) => item.materialType === "flashcard"
+    (item) =>
+      item.materialType === "flashcard"
   ).length;
+
+  const quizzes = materials.filter(
+    (item) =>
+      item.materialType === "quiz"
+  ).length;
+
+
+  // =========================
+  // SEARCH FILES
+  // =========================
+
+  const filteredDocuments =
+    documents.filter((doc) =>
+      doc.fileName
+        ?.toLowerCase()
+        .includes(search.toLowerCase())
+    );
+
+
+  // =========================
+  // LOGOUT
+  // =========================
 
   const logout = () => {
     localStorage.removeItem("token");
     navigate("/login");
   };
 
+
   return (
     <div className="dashboard">
 
       {/* SIDEBAR */}
+
       <aside className="sidebar">
 
         <h2>⚡ StudyGen</h2>
 
         <nav>
+
           <Link to="/dashboard">
             🏠 Dashboard
           </Link>
@@ -90,6 +134,10 @@ function Dashboard() {
             🧠 Flashcards
           </Link>
 
+          <Link to="/quiz">
+            📝 Quiz
+          </Link>
+
           <Link to="/chatbot">
             🤖 AI Tutor
           </Link>
@@ -104,57 +152,94 @@ function Dashboard() {
           >
             🚪 Logout
           </button>
+
         </nav>
 
       </aside>
 
 
       {/* MAIN DASHBOARD */}
+
       <main className="dashboard-main">
 
+        {/* TOP BAR */}
+
         <div className="topbar">
+
           <div>
-            <h1>Welcome Back 👋</h1>
+            <h1>
+              Welcome Back 👋
+            </h1>
+
             <p>
-              Generate and manage your AI study materials.
+              Generate and manage your AI
+              study materials.
             </p>
           </div>
 
+
           <input
             type="text"
-            placeholder="Search notes, files, topics..."
+            placeholder="Search uploaded files..."
+            value={search}
+            onChange={(e) =>
+              setSearch(e.target.value)
+            }
           />
+
         </div>
 
 
         {/* STATISTICS */}
+
         <div className="stats-grid">
 
           <div className="stat-card">
-            <h2>📁 {documents.length}</h2>
+            <h2>
+              📁 {documents.length}
+            </h2>
             <p>Total Files</p>
           </div>
 
+
           <div className="stat-card">
-            <h2>📄 {summaries}</h2>
+            <h2>
+              📄 {summaries}
+            </h2>
             <p>Summaries</p>
           </div>
 
+
           <div className="stat-card">
-            <h2>🧠 {mcqs}</h2>
+            <h2>
+              🧠 {mcqs}
+            </h2>
             <p>MCQ Sets</p>
           </div>
 
+
           <div className="stat-card">
-            <h2>🗂️ {flashcards}</h2>
+            <h2>
+              🗂️ {flashcards}
+            </h2>
             <p>Flashcard Sets</p>
+          </div>
+
+
+          <div className="stat-card">
+            <h2>
+              📝 {quizzes}
+            </h2>
+            <p>Quiz Sets</p>
           </div>
 
         </div>
 
 
         {/* QUICK ACTIONS */}
+
         <div>
+
           <h2>⚡ Quick Actions</h2>
 
           <div className="action-grid">
@@ -175,24 +260,36 @@ function Dashboard() {
               🗂️ Flashcards
             </Link>
 
+            <Link to="/quiz">
+              📝 Create Quiz
+            </Link>
+
             <Link to="/chatbot">
               🤖 AI Tutor
             </Link>
 
           </div>
+
         </div>
 
 
         {/* UPLOAD */}
+
         <div className="upload-panel">
 
           <div>
-            <h2>Upload Study Material</h2>
+
+            <h2>
+              Upload Study Material
+            </h2>
 
             <p>
-              Upload PDF, DOCX or TXT files to generate AI study materials.
+              Upload PDF, DOCX or TXT files
+              to generate AI study materials.
             </p>
+
           </div>
+
 
           <Link
             to="/upload"
@@ -205,6 +302,7 @@ function Dashboard() {
 
 
         {/* AI FEATURES */}
+
         <div className="tool-grid">
 
           <Link
@@ -212,56 +310,102 @@ function Dashboard() {
             className="tool-card"
           >
             <h2>📄 Summary</h2>
+
             <p>
-              Generate AI summaries from your uploaded study material.
+              Generate AI summaries from your
+              uploaded study material.
             </p>
           </Link>
+
 
           <Link
             to="/mcq"
             className="tool-card"
           >
-            <h2>🧠 MCQ Generator</h2>
+            <h2>
+              🧠 MCQ Generator
+            </h2>
+
             <p>
-              Generate practice questions automatically.
+              Generate practice questions
+              automatically.
             </p>
           </Link>
+
 
           <Link
             to="/flashcards"
             className="tool-card"
           >
-            <h2>🗂️ Flashcards</h2>
+            <h2>
+              🗂️ Flashcards
+            </h2>
+
             <p>
-              Create quick revision flashcards.
+              Create quick revision
+              flashcards.
             </p>
           </Link>
+
+
+          <Link
+            to="/quiz"
+            className="tool-card"
+          >
+            <h2>
+              📝 Quiz Generator
+            </h2>
+
+            <p>
+              Generate AI quizzes from your
+              uploaded study material.
+            </p>
+          </Link>
+
 
           <Link
             to="/chatbot"
             className="tool-card"
           >
-            <h2>🤖 AI Tutor</h2>
+            <h2>
+              🤖 AI Tutor
+            </h2>
+
             <p>
-              Ask questions from your uploaded study material.
+              Ask questions from your
+              uploaded study material.
             </p>
           </Link>
 
         </div>
 
 
-        {/* RECENT FILES */}
+        {/* RECENT FILES / SEARCH RESULTS */}
+
         <div className="recent-files">
 
-          <h2>📁 Recent Files</h2>
+          <h2>
+            {search
+              ? "🔍 Search Results"
+              : "📁 Recent Files"}
+          </h2>
+
 
           {documents.length === 0 ? (
 
-            <p>No documents uploaded yet.</p>
+            <p>
+              No documents uploaded yet.
+            </p>
+
+          ) : filteredDocuments.length === 0 ? (
+
+            <p>
+              No matching files found.
+            </p>
 
           ) : (
 
-            documents
+            filteredDocuments
               .slice(-5)
               .reverse()
               .map((doc) => (
@@ -270,6 +414,7 @@ function Dashboard() {
                   className="file-row"
                   key={doc._id}
                 >
+
                   <span>
                     📄 {doc.fileName}
                   </span>
@@ -277,6 +422,7 @@ function Dashboard() {
                   <Link to="/summary">
                     Use with AI
                   </Link>
+
                 </div>
 
               ))
