@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-function Flashcards() {
+function Quiz() {
   const [documents, setDocuments] = useState([]);
   const [selectedDocument, setSelectedDocument] = useState("");
-  const [flashcards, setFlashcards] = useState("");
+  const [quiz, setQuiz] = useState("");
   const [loading, setLoading] = useState(false);
 
 
@@ -62,10 +62,10 @@ function Flashcards() {
 
 
   // =========================
-  // GENERATE FLASHCARDS
+  // GENERATE QUIZ
   // =========================
 
-  const generateFlashcards = async () => {
+  const generateQuiz = async () => {
     if (!selectedDocument) {
       alert(
         "Please select an uploaded document first."
@@ -77,10 +77,10 @@ function Flashcards() {
 
     try {
       setLoading(true);
-      setFlashcards("");
+      setQuiz("");
 
       const res = await fetch(
-        `http://localhost:5000/api/ai/flashcards/${selectedDocument}`,
+        `http://localhost:5000/api/ai/quiz/${selectedDocument}`,
         {
           method: "POST",
 
@@ -95,26 +95,26 @@ function Flashcards() {
       if (!res.ok) {
         alert(
           data.message ||
-            "Flashcard generation failed."
+            "Quiz generation failed."
         );
         return;
       }
 
       if (!data.content || !data.content.trim()) {
         alert(
-          "AI returned an empty flashcard response."
+          "AI returned an empty quiz response."
         );
         return;
       }
 
-      const cleanedFlashcards =
+      const cleanedQuiz =
         cleanMarkdown(data.content);
 
-      setFlashcards(cleanedFlashcards);
+      setQuiz(cleanedQuiz);
 
     } catch (error) {
       console.error(
-        "Flashcard generation error:",
+        "Quiz generation error:",
         error
       );
 
@@ -129,18 +129,18 @@ function Flashcards() {
 
 
   // =========================
-  // COPY FLASHCARDS
+  // COPY QUIZ
   // =========================
 
-  const copyFlashcards = async () => {
-    if (!flashcards) return;
+  const copyQuiz = async () => {
+    if (!quiz) return;
 
     try {
       await navigator.clipboard.writeText(
-        flashcards
+        quiz
       );
 
-      alert("Flashcards copied!");
+      alert("Quiz copied!");
 
     } catch (error) {
       console.error(
@@ -152,14 +152,14 @@ function Flashcards() {
 
 
   // =========================
-  // DOWNLOAD FLASHCARDS
+  // DOWNLOAD QUIZ
   // =========================
 
-  const downloadFlashcards = () => {
-    if (!flashcards) return;
+  const downloadQuiz = () => {
+    if (!quiz) return;
 
     const blob = new Blob(
-      [flashcards],
+      [quiz],
       {
         type: "text/plain",
       }
@@ -172,7 +172,7 @@ function Flashcards() {
       document.createElement("a");
 
     a.href = url;
-    a.download = "AI-Flashcards.txt";
+    a.download = "AI-Quiz.txt";
 
     a.click();
 
@@ -187,12 +187,12 @@ function Flashcards() {
 
         <div>
           <h1>
-            🗂️ Flashcards Generator
+            📝 Quiz Generator
           </h1>
 
           <p>
-            Create quick flashcards for fast
-            revision and memorization.
+            Create a quiz from your uploaded
+            study materials.
           </p>
         </div>
 
@@ -238,12 +238,12 @@ function Flashcards() {
 
 
           <button
-            onClick={generateFlashcards}
+            onClick={generateQuiz}
             disabled={loading}
           >
             {loading
               ? "Generating..."
-              : "Generate Flashcards"}
+              : "Generate Quiz"}
           </button>
 
         </div>
@@ -252,7 +252,7 @@ function Flashcards() {
         <div className="result-card">
 
           <h2>
-            Flashcards Preview
+            Generated Quiz
           </h2>
 
           <div
@@ -261,23 +261,23 @@ function Flashcards() {
               lineHeight: "1.7",
             }}
           >
-            {flashcards ||
-              "Select an uploaded document and click Generate Flashcards."}
+            {quiz ||
+              "Select an uploaded document and click Generate Quiz."}
           </div>
 
 
           <div className="result-actions">
 
             <button
-              onClick={copyFlashcards}
-              disabled={!flashcards}
+              onClick={copyQuiz}
+              disabled={!quiz}
             >
               Copy
             </button>
 
             <button
-              onClick={downloadFlashcards}
-              disabled={!flashcards}
+              onClick={downloadQuiz}
+              disabled={!quiz}
             >
               Download
             </button>
@@ -292,4 +292,4 @@ function Flashcards() {
   );
 }
 
-export default Flashcards;
+export default Quiz;

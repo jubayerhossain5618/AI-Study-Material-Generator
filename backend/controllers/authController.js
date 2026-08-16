@@ -1,9 +1,13 @@
-// register, login, getProfile controllers
+// register, login, getProfile, updateProfile controllers
+
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const generateToken = require("../utils/generateToken");
 
+
+// ==============================
 // Register
+// ==============================
 
 exports.register = async (req, res) => {
 
@@ -34,6 +38,7 @@ exports.register = async (req, res) => {
             _id: user._id,
             name: user.name,
             email: user.email,
+            role: user.role,
             token: generateToken(user._id)
         });
 
@@ -45,7 +50,10 @@ exports.register = async (req, res) => {
     }
 };
 
+
+// ==============================
 // Login
+// ==============================
 
 exports.login = async (req, res) => {
 
@@ -87,13 +95,89 @@ exports.login = async (req, res) => {
     }
 };
 
+
+// ==============================
 // Get Profile
+// ==============================
 
 exports.getProfile = async (req, res) => {
 
-    const user =
-        await User.findById(req.user.id)
-            .select("-password");
+    try {
 
-    res.json(user);
+        const user =
+            await User.findById(req.user.id)
+                .select("-password");
+
+        if (!user) {
+
+            return res.status(404).json({
+                message: "User not found"
+            });
+        }
+
+        res.json(user);
+
+    } catch (error) {
+
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};
+
+
+// ==============================
+// Update Profile
+// ==============================
+
+exports.updateProfile = async (req, res) => {
+
+    try {
+
+        const { name, email } = req.body;
+
+        const user =
+            await User.findById(req.user.id);
+
+        if (!user) {
+
+            return res.status(404).json({
+                message: "User not found"
+            });
+        }
+
+        // Check if another user already uses this email
+        if (email && email !== user.email) {
+
+            const existingUser =
+                await User.findOne({ email });
+
+            if (existingUser) {
+
+                return res.status(400).json({
+                    message: "Email already in use"
+                });
+            }
+        }
+
+        user.name = name || user.name;
+        user.email = email || user.email;
+
+        const updatedUser =
+            await user.save();
+
+        res.json({
+            _id: updatedUser._id,
+            name: updatedUser.name,
+            email: updatedUser.email,
+            role: updatedUser.role,
+            message: "Profile updated successfully"
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+            message: error.message
+        });
+    }
 };

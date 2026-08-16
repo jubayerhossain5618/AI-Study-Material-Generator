@@ -1,6 +1,5 @@
 const Document = require("../models/Document");
 const ChatHistory = require("../models/ChatHistory");
-
 const {
   askQuestion
 } = require("../services/aiServices");

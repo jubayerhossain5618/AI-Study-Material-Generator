@@ -15,7 +15,28 @@ function Chatbot() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Load uploaded documents
+
+  // =========================
+  // CLEAN AI MARKDOWN
+  // =========================
+
+  const cleanMarkdown = (text) => {
+    if (!text) return "";
+
+    return text
+      .replace(/^#{1,6}\s*/gm, "")
+      .replace(/\*\*(.*?)\*\*/g, "$1")
+      .replace(/__(.*?)__/g, "$1")
+      .replace(/`(.*?)`/g, "$1")
+      .replace(/^\s*[-*]\s+/gm, "• ")
+      .trim();
+  };
+
+
+  // =========================
+  // LOAD DOCUMENTS
+  // =========================
+
   useEffect(() => {
     const loadDocuments = async () => {
       const token = localStorage.getItem("token");
@@ -35,25 +56,37 @@ function Chatbot() {
         if (res.ok) {
           setDocuments(data);
         }
+
       } catch (error) {
-        console.error("Document loading error:", error);
+        console.error(
+          "Document loading error:",
+          error
+        );
       }
     };
 
     loadDocuments();
   }, []);
 
-  // Send question to AI Tutor
+
+  // =========================
+  // SEND QUESTION
+  // =========================
+
   const sendMessage = async () => {
     const question = input.trim();
 
     if (!selectedDocument) {
-      alert("Please select a study material first.");
+      alert(
+        "Please select a study material first."
+      );
       return;
     }
 
     if (!question) {
-      alert("Please enter a question.");
+      alert(
+        "Please enter a question."
+      );
       return;
     }
 
@@ -75,10 +108,12 @@ function Chatbot() {
         `http://localhost:5000/api/chat/${selectedDocument}`,
         {
           method: "POST",
+
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
+
           body: JSON.stringify({
             question: question,
           }),
@@ -89,21 +124,28 @@ function Chatbot() {
 
       if (!res.ok) {
         throw new Error(
-          data.message || "AI Tutor request failed."
+          data.message ||
+            "AI Tutor request failed."
         );
       }
 
       if (!data.answer || !data.answer.trim()) {
-        throw new Error("AI returned an empty answer.");
+        throw new Error(
+          "AI returned an empty answer."
+        );
       }
+
+      const cleanedAnswer =
+        cleanMarkdown(data.answer);
 
       setMessages((previous) => [
         ...previous,
         {
           sender: "ai",
-          text: data.answer,
+          text: cleanedAnswer,
         },
       ]);
+
     } catch (error) {
       setMessages((previous) => [
         ...previous,
@@ -112,27 +154,43 @@ function Chatbot() {
           text: `⚠️ ${error.message}`,
         },
       ]);
+
     } finally {
       setLoading(false);
     }
   };
 
+
+  // =========================
+  // ENTER KEY
+  // =========================
+
   const handleKeyDown = (event) => {
-    if (event.key === "Enter" && !loading) {
+    if (
+      event.key === "Enter" &&
+      !loading
+    ) {
       sendMessage();
     }
   };
 
+
   return (
     <div className="chat-page">
+
       <div className="chat-header">
+
         <div>
-          <h2>🤖 AI Study Tutor</h2>
+          <h2>
+            🤖 AI Study Tutor
+          </h2>
 
           <select
             value={selectedDocument}
             onChange={(e) =>
-              setSelectedDocument(e.target.value)
+              setSelectedDocument(
+                e.target.value
+              )
             }
           >
             <option value="">
@@ -140,52 +198,76 @@ function Chatbot() {
             </option>
 
             {documents.map((doc) => (
-              <option key={doc._id} value={doc._id}>
+              <option
+                key={doc._id}
+                value={doc._id}
+              >
                 {doc.fileName}
               </option>
             ))}
           </select>
         </div>
 
-        <Link to="/dashboard" className="back-btn">
+
+        <Link
+          to="/dashboard"
+          className="back-btn"
+        >
           Back
         </Link>
+
       </div>
 
+
       <div className="chat-box">
+
         {messages.map((msg, index) => (
           <div
             key={index}
             className={`chat-message ${msg.sender}`}
-            style={{ whiteSpace: "pre-wrap" }}
+            style={{
+              whiteSpace: "pre-wrap",
+              lineHeight: "1.6",
+            }}
           >
             {msg.text}
           </div>
         ))}
+
 
         {loading && (
           <div className="chat-message ai">
             🤖 Thinking...
           </div>
         )}
+
       </div>
 
+
       <div className="chat-input">
+
         <input
           value={input}
-          onChange={(e) => setInput(e.target.value)}
+          onChange={(e) =>
+            setInput(e.target.value)
+          }
           onKeyDown={handleKeyDown}
           placeholder="Ask a question from your study material..."
           disabled={loading}
         />
 
+
         <button
           onClick={sendMessage}
           disabled={loading}
         >
-          {loading ? "Thinking..." : "Send"}
+          {loading
+            ? "Thinking..."
+            : "Send"}
         </button>
+
       </div>
+
     </div>
   );
 }

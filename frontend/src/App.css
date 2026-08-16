@@ -573,3 +573,98 @@ html {
     width: 100%;
   }
 }
+/* ================= DASHBOARD RESPONSIVE ================= */
+
+@media (max-width: 900px) {
+
+  .dashboard {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .sidebar {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .sidebar h2 {
+    margin-bottom: 18px;
+  }
+
+  .sidebar nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .sidebar a,
+  .logout-btn {
+    padding: 10px 12px;
+  }
+
+  .dashboard-main {
+    width: 100%;
+    padding: 24px 18px;
+  }
+
+  .topbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .topbar input {
+    width: 100%;
+  }
+
+  .stats-grid,
+  .tool-grid,
+  .action-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .upload-panel {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+
+  .generator-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .page-shell {
+    padding: 28px 18px;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+}
+
+
+@media (max-width: 600px) {
+
+  .stats-grid,
+  .tool-grid,
+  .action-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar nav {
+    flex-direction: column;
+  }
+
+  .file-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .login-card,
+  .upload-card {
+    width: calc(100% - 30px);
+    padding: 28px 20px;
+  }
+}

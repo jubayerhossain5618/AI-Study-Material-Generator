@@ -7,16 +7,49 @@ function Summary() {
   const [summary, setSummary] = useState("");
   const [loading, setLoading] = useState(false);
 
+
+  // =========================
+  // CLEAN AI MARKDOWN
+  // =========================
+
+  const cleanMarkdown = (text) => {
+    if (!text) return "";
+
+    return text
+      // Remove headings: # ## ###
+      .replace(/^#{1,6}\s*/gm, "")
+
+      // Remove bold markdown: **text**
+      .replace(/\*\*(.*?)\*\*/g, "$1")
+
+      // Remove bold markdown: __text__
+      .replace(/__(.*?)__/g, "$1")
+
+      // Change markdown bullets to clean bullets
+      .replace(/^\s*[-*]\s+/gm, "• ")
+
+      // Remove extra spaces
+      .trim();
+  };
+
+
+  // =========================
+  // LOAD DOCUMENTS
+  // =========================
+
   useEffect(() => {
     const loadDocuments = async () => {
       const token = localStorage.getItem("token");
 
       try {
-        const res = await fetch("http://localhost:5000/api/documents", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await fetch(
+          "http://localhost:5000/api/documents",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         const data = await res.json();
 
@@ -24,16 +57,26 @@ function Summary() {
           setDocuments(data);
         }
       } catch (error) {
-        console.error(error);
+        console.error(
+          "Document loading error:",
+          error
+        );
       }
     };
 
     loadDocuments();
   }, []);
 
+
+  // =========================
+  // GENERATE SUMMARY
+  // =========================
+
   const generateSummary = async () => {
     if (!selectedDocument) {
-      alert("Please select an uploaded document first");
+      alert(
+        "Please select an uploaded document first."
+      );
       return;
     }
 
@@ -47,6 +90,7 @@ function Summary() {
         `http://localhost:5000/api/ai/summary/${selectedDocument}`,
         {
           method: "POST",
+
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -56,96 +100,207 @@ function Summary() {
       const data = await res.json();
 
       if (!res.ok) {
-        alert(data.message || "Summary generation failed");
+        alert(
+          data.message ||
+            "Summary generation failed."
+        );
         return;
       }
 
-      setSummary(data.content || "No summary received.");
+      if (!data.content || !data.content.trim()) {
+        alert(
+          "AI returned an empty summary."
+        );
+        return;
+      }
+
+      const cleanedSummary =
+        cleanMarkdown(data.content);
+
+      setSummary(cleanedSummary);
+
     } catch (error) {
-      alert("AI connection failed. Please try again.");
+      console.error(
+        "Summary generation error:",
+        error
+      );
+
+      alert(
+        "AI connection failed. Please try again."
+      );
+
     } finally {
       setLoading(false);
     }
   };
 
-  const copySummary = () => {
+
+  // =========================
+  // COPY SUMMARY
+  // =========================
+
+  const copySummary = async () => {
     if (!summary) return;
 
-    navigator.clipboard.writeText(summary);
-    alert("Summary copied!");
+    try {
+      await navigator.clipboard.writeText(
+        summary
+      );
+
+      alert("Summary copied!");
+
+    } catch (error) {
+      console.error(
+        "Copy error:",
+        error
+      );
+    }
   };
+
+
+  // =========================
+  // DOWNLOAD SUMMARY
+  // =========================
 
   const downloadSummary = () => {
     if (!summary) return;
 
-    const blob = new Blob([summary], {
-      type: "text/plain",
-    });
+    const blob = new Blob(
+      [summary],
+      {
+        type: "text/plain",
+      }
+    );
 
-    const url = URL.createObjectURL(blob);
+    const url =
+      URL.createObjectURL(blob);
 
-    const a = document.createElement("a");
+    const a =
+      document.createElement("a");
+
     a.href = url;
     a.download = "AI-Summary.txt";
+
     a.click();
 
     URL.revokeObjectURL(url);
   };
 
+
   return (
     <div className="page-shell">
+
       <div className="page-header">
+
         <div>
-          <h1>📄 Summary Generator</h1>
-          <p>Generate short and easy summaries from your study materials.</p>
+          <h1>
+            📄 Summary Generator
+          </h1>
+
+          <p>
+            Generate short and easy summaries
+            from your study materials.
+          </p>
         </div>
 
-        <Link to="/dashboard" className="back-btn">
+        <Link
+          to="/dashboard"
+          className="back-btn"
+        >
           Back to Dashboard
         </Link>
+
       </div>
 
+
       <div className="generator-layout">
+
+        {/* SELECT DOCUMENT */}
+
         <div className="generator-card">
-          <h2>Select Study Material</h2>
+
+          <h2>
+            Select Study Material
+          </h2>
 
           <select
             value={selectedDocument}
-            onChange={(e) => setSelectedDocument(e.target.value)}
+            onChange={(e) =>
+              setSelectedDocument(
+                e.target.value
+              )
+            }
           >
-            <option value="">-- Select uploaded document --</option>
+
+            <option value="">
+              -- Select uploaded document --
+            </option>
 
             {documents.map((doc) => (
-              <option key={doc._id} value={doc._id}>
+              <option
+                key={doc._id}
+                value={doc._id}
+              >
                 {doc.fileName}
               </option>
             ))}
+
           </select>
 
-          <button onClick={generateSummary} disabled={loading}>
-            {loading ? "Generating..." : "Generate Summary"}
+
+          <button
+            onClick={generateSummary}
+            disabled={loading}
+          >
+            {loading
+              ? "Generating..."
+              : "Generate Summary"}
           </button>
+
         </div>
 
-        <div className="result-card">
-          <h2>Generated Summary</h2>
 
-          <p style={{ whiteSpace: "pre-wrap" }}>
+        {/* RESULT */}
+
+        <div className="result-card">
+
+          <h2>
+            Generated Summary
+          </h2>
+
+          <div
+            style={{
+              whiteSpace: "pre-wrap",
+              lineHeight: "1.7",
+            }}
+          >
             {summary ||
               "Select an uploaded document and click Generate Summary."}
-          </p>
+          </div>
+
 
           <div className="result-actions">
-            <button onClick={copySummary} disabled={!summary}>
+
+            <button
+              onClick={copySummary}
+              disabled={!summary}
+            >
               Copy
             </button>
 
-            <button onClick={downloadSummary} disabled={!summary}>
+            <button
+              onClick={downloadSummary}
+              disabled={!summary}
+            >
               Download
             </button>
+
           </div>
+
         </div>
+
       </div>
+
     </div>
   );
 }
