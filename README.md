@@ -290,5 +290,5 @@ GEMINI_API_KEY=your_gemini_api_key
 ## 📄 License
 
 This project is developed for academic purposes as part of the CSE4104 – Software Development III course.
----
+
 
