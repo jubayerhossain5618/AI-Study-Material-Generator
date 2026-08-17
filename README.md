@@ -224,7 +224,69 @@ This project is developed for academic purposes as part of the CSE4104 – Softw
 
 ## ⭐ Project Status
 
-**Current Phase:** Backend development 
+**Current Phase:** Testing & Debugging (Week 10)
 
-**Development Status:** In Progress 🚧
+**Development Status:** Testing in Progress 🧪
+**Latest Completed Phase:** Week 9 — Feature Completion ✅
+---
 
+## ✅ Completed Features
+
+- User Registration & Login
+- JWT Authentication
+- PDF, DOCX & TXT File Upload
+- AI Summary Generator
+- AI MCQ Generator
+- AI Flashcard Generator
+- AI Quiz Generator
+- AI Study Tutor / Chatbot
+- User Profile Update
+- Admin Dashboard
+- Dashboard Search
+- Responsive UI
+- MongoDB Database Integration
+
+- ---
+
+## 🛠️ Technology Stack
+
+- Frontend: React.js + Vite
+- Backend: Node.js + Express.js
+- Database: MongoDB
+- Authentication: JWT + bcrypt
+- AI Integration: Google Gemini API
+
+- ---
+
+## 🚀 Project Progress
+
+- Week 7 — Frontend Development ✅
+- Week 8 — AI Integration ✅
+- Week 9 — Feature Completion ✅
+- Week 10 — Testing & Debugging 🔄
+- Week 11 — Deployment ⏳
+- Week 12 — Documentation ⏳
+- Week 13 — Presentation Preparation ⏳
+- Week 14 — Final Presentation & Viva ⏳
+
+- ---
+
+## ▶️ How to Run the Project
+
+### Backend
+
+```bash
+cd backend
+npm install
+npm start
+```
+cd frontend
+npm install
+npm run dev
+
+Environment Variables
+
+Create a .env file inside the backend folder and add the required environment variables.
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+GEMINI_API_KEY=your_gemini_api_key
