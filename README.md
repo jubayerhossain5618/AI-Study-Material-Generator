@@ -214,11 +214,6 @@ Display Results to User
 
 
 
----
-
-## 📄 License
-
-This project is developed for academic purposes as part of the CSE4104 – Software Development III course.
 
 ---
 
@@ -290,3 +285,10 @@ Create a .env file inside the backend folder and add the required environment va
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
 GEMINI_API_KEY=your_gemini_api_key
+---
+
+## 📄 License
+
+This project is developed for academic purposes as part of the CSE4104 – Software Development III course.
+---
+
