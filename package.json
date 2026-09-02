@@ -3,6 +3,11 @@
     "@google/genai": "^2.16.0",
     "axios": "^1.18.1",
     "bootstrap": "^5.3.8",
+    "express": "^5.2.1",
+    "mammoth": "^1.12.2",
+    "mongoose": "^9.9.4",
+    "multer": "^2.3.0",
+    "pdf-parse": "^2.4.5",
     "react-router-dom": "^7.18.1"
   }
 }

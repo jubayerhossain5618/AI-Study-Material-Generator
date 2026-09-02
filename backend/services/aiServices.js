@@ -1,37 +1,30 @@
+const OpenAI = require("openai");
+
 let aiClient = null;
 
-// 60 seconds AI request timeout
 const AI_TIMEOUT = 60000;
 
 async function getAIClient() {
-  if (!process.env.GEMINI_API_KEY) {
-    throw new Error("GEMINI_API_KEY is missing");
+  if (!process.env.OPENROUTER_API_KEY) {
+    throw new Error("OPENROUTER_API_KEY is missing");
   }
 
   if (!aiClient) {
-    const { GoogleGenAI } = await import("@google/genai");
-
-    aiClient = new GoogleGenAI({
-      apiKey: process.env.GEMINI_API_KEY,
+    aiClient = new OpenAI({
+      baseURL: "https://openrouter.ai/api/v1",
+      apiKey: process.env.OPENROUTER_API_KEY,
+      timeout: AI_TIMEOUT,
     });
   }
 
   return aiClient;
 }
 
-
-// ================================
-// Common Gemini Error Handler
-// ================================
-
-const handleGeminiError = (error) => {
-
+const handleAIError = (error) => {
   const errorMessage =
     error?.message?.toLowerCase() || "";
 
-  // Timeout
   if (
-    error?.name === "AbortError" ||
     errorMessage.includes("timeout") ||
     errorMessage.includes("timed out") ||
     errorMessage.includes("aborted")
@@ -41,27 +34,33 @@ const handleGeminiError = (error) => {
     );
   }
 
-  // Rate Limit
   if (
-    error?.status === 429 ||
-    error?.code === 429
+    error?.status === 401 ||
+    error?.status === 403
   ) {
     throw new Error(
-      "AI request limit reached. Please wait a little and try again."
+      "AI API key is invalid or unauthorized."
     );
   }
 
-  // Model unavailable
-  if (
-    error?.status === 404 ||
-    error?.code === 404
-  ) {
+  if (error?.status === 402) {
     throw new Error(
-      "Selected Gemini AI model is currently unavailable."
+      "OpenRouter credits or token limit is insufficient."
     );
   }
 
-  // Temporary Gemini/server problem
+  if (error?.status === 429) {
+    throw new Error(
+      "AI request limit reached. Please wait and try again."
+    );
+  }
+
+  if (error?.status === 404) {
+    throw new Error(
+      "Selected AI model is unavailable."
+    );
+  }
+
   if (
     error?.status === 500 ||
     error?.status === 502 ||
@@ -78,16 +77,8 @@ const handleGeminiError = (error) => {
   );
 };
 
-
-// ================================
-// Generic AI Content Generator
-// Summary, MCQ, Flashcards, Quiz
-// ================================
-
 const generateContent = async (prompt) => {
-
   try {
-
     if (!prompt || !prompt.trim()) {
       throw new Error("AI prompt is empty");
     }
@@ -95,36 +86,29 @@ const generateContent = async (prompt) => {
     const ai = await getAIClient();
 
     const response =
-      await ai.models.generateContent({
-
-        model: "gemini-3.5-flash-lite",
-
-        contents: prompt,
-
-        config: {
-
-          httpOptions: {
-            timeout: AI_TIMEOUT,
+      await ai.chat.completions.create({
+        model: "google/gemini-2.5-flash",
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are an educational AI assistant for university students. Generate accurate, clear and student-friendly study materials. Use only the study material provided. Do not invent unsupported information. Keep the output well organized. Follow the requested output format carefully.",
           },
-
-          systemInstruction: `
-You are an educational AI assistant for university students.
-
-Your job is to generate accurate, clear and student-friendly study materials.
-
-Rules:
-- Use only the study material provided by the user.
-- Do not invent unsupported information.
-- Keep the output well organized.
-- Use simple and understandable language.
-- Follow the requested output format carefully.
-- Do not return an empty response.
-          `,
+          {
+            role: "user",
+            content: prompt,
+          },
+        ],
+        max_tokens: 4000,
+        extra_body: {
+          reasoning: {
+            max_tokens: 0,
+          },
         },
       });
 
     const text =
-      response.text?.trim();
+      response.choices?.[0]?.message?.content?.trim();
 
     if (!text) {
       throw new Error(
@@ -133,30 +117,21 @@ Rules:
     }
 
     return text;
-
   } catch (error) {
-
     console.error(
-      "Gemini AI Error:",
+      "OpenRouter AI Error:",
       error
     );
 
-    handleGeminiError(error);
+    handleAIError(error);
   }
 };
-
-
-// ================================
-// AI Tutor
-// ================================
 
 const askQuestion = async (
   documentText,
   question
 ) => {
-
   try {
-
     if (
       !documentText ||
       !documentText.trim()
@@ -175,15 +150,20 @@ const askQuestion = async (
       );
     }
 
-    const ai =
-      await getAIClient();
+    const ai = await getAIClient();
 
     const response =
-      await ai.models.generateContent({
-
-        model: "gemini-3.5-flash-lite",
-
-        contents: `
+      await ai.chat.completions.create({
+        model: "google/gemini-2.5-flash",
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are an AI Study Tutor for university students. Answer the student's question using only the provided study material. Do not invent facts. If the answer cannot be found in the material, say: The answer is not available in the uploaded study material. Explain clearly and educationally using simple language.",
+          },
+          {
+            role: "user",
+            content: `
 Study Material:
 
 ${documentText}
@@ -191,34 +171,19 @@ ${documentText}
 Student Question:
 
 ${question}
-        `,
-
-        config: {
-
-          httpOptions: {
-            timeout: AI_TIMEOUT,
+`,
           },
-
-          systemInstruction: `
-You are an AI Study Tutor for university students.
-
-Answer the student's question using only the provided study material.
-
-Rules:
-- Do not invent facts.
-- Do not use information outside the provided material.
-- If the answer cannot be found in the material, say:
-  "The answer is not available in the uploaded study material."
-- Explain clearly and educationally.
-- Use simple language.
-- Give examples only when they can be supported by the provided material.
-- Keep the answer focused on the student's question.
-          `,
+        ],
+        max_tokens: 4000,
+        extra_body: {
+          reasoning: {
+            max_tokens: 0,
+          },
         },
       });
 
     const text =
-      response.text?.trim();
+      response.choices?.[0]?.message?.content?.trim();
 
     if (!text) {
       throw new Error(
@@ -227,18 +192,15 @@ Rules:
     }
 
     return text;
-
   } catch (error) {
-
     console.error(
-      "Gemini Tutor Error:",
+      "OpenRouter Tutor Error:",
       error
     );
 
-    handleGeminiError(error);
+    handleAIError(error);
   }
 };
-
 
 module.exports = {
   generateContent,
