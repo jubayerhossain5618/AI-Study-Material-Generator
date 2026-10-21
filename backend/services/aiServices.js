@@ -43,7 +43,6 @@ const handleGeminiError = (error) => {
     0
   );
 
-  // Log diagnostic information without logging API keys
   console.error("Gemini request failed:", {
     message,
     status: status || "unknown",
@@ -106,34 +105,38 @@ const handleGeminiError = (error) => {
 // ================================
 
 async function requestGemini(contents, systemInstruction) {
-  const ai = await getAIClient();
+  try {
+    const ai = await getAIClient();
 
-  const response = await ai.models.generateContent({
-    // Preserve the model currently configured in your project.
-    model: "gemini-3.8-flash",
+    const response = await ai.models.generateContent({
+      // Updated model
+      model: "gemini-3.6-flash",
 
-    contents,
+      contents,
 
-    config: {
-      httpOptions: {
-        timeout: AI_TIMEOUT,
+      config: {
+        httpOptions: {
+          timeout: AI_TIMEOUT,
+        },
+
+        systemInstruction,
+
+        maxOutputTokens: MAX_OUTPUT_TOKENS,
+
+        temperature: 0.2,
       },
+    });
 
-      systemInstruction,
+    const text = response.text?.trim();
 
-      maxOutputTokens: MAX_OUTPUT_TOKENS,
+    if (!text) {
+      throw new Error("Empty AI response. Please try again.");
+    }
 
-      temperature: 0.2,
-    },
-  });
-
-  const text = response.text?.trim();
-
-  if (!text) {
-    throw new Error("Empty AI response. Please try again.");
+    return text;
+  } catch (error) {
+    handleGeminiError(error);
   }
-
-  return text;
 }
 
 // ================================
@@ -142,14 +145,13 @@ async function requestGemini(contents, systemInstruction) {
 // ================================
 
 const generateContent = async (prompt) => {
-  try {
-    if (typeof prompt !== "string" || !prompt.trim()) {
-      throw new Error("AI prompt is empty");
-    }
+  if (typeof prompt !== "string" || !prompt.trim()) {
+    throw new Error("AI prompt is empty");
+  }
 
-    return await requestGemini(
-      prompt,
-      `You are an educational AI assistant for university students.
+  return requestGemini(
+    prompt,
+    `You are an educational AI assistant for university students.
 
 Rules:
 - Use the provided study material as the factual source.
@@ -159,16 +161,7 @@ Rules:
 - Keep answers concise while preserving important information.
 - Organize the output with readable headings and numbering.
 - Return the requested study material directly.`
-    );
-  } catch (error) {
-    if (
-      error?.message === "AI prompt is empty"
-    ) {
-      throw error;
-    }
-
-    handleGeminiError(error);
-  }
+  );
 };
 
 // ================================
@@ -176,22 +169,21 @@ Rules:
 // ================================
 
 const askQuestion = async (documentText, question) => {
-  try {
-    if (
-      typeof documentText !== "string" ||
-      !documentText.trim()
-    ) {
-      throw new Error("Study material is empty");
-    }
+  if (
+    typeof documentText !== "string" ||
+    !documentText.trim()
+  ) {
+    throw new Error("Study material is empty");
+  }
 
-    if (
-      typeof question !== "string" ||
-      !question.trim()
-    ) {
-      throw new Error("Question is required");
-    }
+  if (
+    typeof question !== "string" ||
+    !question.trim()
+  ) {
+    throw new Error("Question is required");
+  }
 
-    const contents = `
+  const contents = `
 Study Material:
 ${documentText}
 
@@ -199,9 +191,9 @@ Student Question:
 ${question.trim()}
 `;
 
-    return await requestGemini(
-      contents,
-      `You are an AI Study Tutor for university students.
+  return requestGemini(
+    contents,
+    `You are an AI Study Tutor for university students.
 
 Rules:
 - Answer using the provided study material.
@@ -210,17 +202,7 @@ Rules:
 - Keep the answer focused on the student's question.
 - If the answer is unavailable, say:
 "The answer is not available in the uploaded study material."`
-    );
-  } catch (error) {
-    if (
-      error?.message === "Study material is empty" ||
-      error?.message === "Question is required"
-    ) {
-      throw error;
-    }
-
-    handleGeminiError(error);
-  }
+  );
 };
 
 // ================================
