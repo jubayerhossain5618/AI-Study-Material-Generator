@@ -58,7 +58,7 @@ function Upload() {
       formData.append("file", file);
 
       const res = await fetch(
-        "http://localhost:5000/api/documents/upload",
+        "https://ai-study-material-generator-xwx7.onrender.com/api/documents/upload",
         {
           method: "POST",
 

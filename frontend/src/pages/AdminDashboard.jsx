@@ -31,25 +31,25 @@ function AdminDashboard() {
         documentsResponse,
         chatsResponse,
       ] = await Promise.all([
-        fetch("http://localhost:5000/api/admin/dashboard", {
+        fetch("https://ai-study-material-generator-xwx7.onrender.com/api/admin/dashboard", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }),
 
-        fetch("http://localhost:5000/api/admin/users", {
+        fetch("https://ai-study-material-generator-xwx7.onrender.com/api/admin/users", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }),
 
-        fetch("http://localhost:5000/api/admin/documents", {
+        fetch("https://ai-study-material-generator-xwx7.onrender.com/api/admin/documents", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }),
 
-        fetch("http://localhost:5000/api/admin/chats", {
+        fetch("https://ai-study-material-generator-xwx7.onrender.com/api/admin/chats", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -141,7 +141,7 @@ function AdminDashboard() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/admin/users/${userId}`,
+        `https://ai-study-material-generator-xwx7.onrender.com/api/admin/users/${userId}`,
         {
           method: "DELETE",
 
@@ -201,7 +201,7 @@ function AdminDashboard() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/admin/documents/${documentId}`,
+        `https://ai-study-material-generator-xwx7.onrender.com/api/admin/documents/${documentId}`,
         {
           method: "DELETE",
 

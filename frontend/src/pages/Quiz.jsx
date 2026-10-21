@@ -35,7 +35,7 @@ function Quiz() {
 
       try {
         const res = await fetch(
-          "http://localhost:5000/api/documents",
+          "https://ai-study-material-generator-xwx7.onrender.com/api/documents",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -80,7 +80,7 @@ function Quiz() {
       setQuiz("");
 
       const res = await fetch(
-        `http://localhost:5000/api/ai/quiz/${selectedDocument}`,
+        `https://ai-study-material-generator-xwx7.onrender.com/api/ai/quiz/${selectedDocument}`,
         {
           method: "POST",
 

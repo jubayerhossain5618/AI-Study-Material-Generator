@@ -114,7 +114,7 @@ npm start
 The backend server runs on:
 
 ```text
-http://localhost:5000
+https://ai-study-material-generator-xwx7.onrender.com
 ```
 
 ### 5. Install Frontend Dependencies

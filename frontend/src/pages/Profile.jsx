@@ -21,7 +21,7 @@ function Profile() {
     const loadProfile = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/auth/profile",
+          "https://ai-study-material-generator-xwx7.onrender.com/api/auth/profile",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -68,7 +68,7 @@ function Profile() {
       setSaving(true);
 
       const response = await fetch(
-        "http://localhost:5000/api/auth/profile",
+        "https://ai-study-material-generator-xwx7.onrender.com/api/auth/profile",
         {
           method: "PUT",
           headers: {

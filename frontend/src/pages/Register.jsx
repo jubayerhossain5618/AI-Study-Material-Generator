@@ -42,7 +42,7 @@ function Register() {
       setLoading(true);
 
       const res = await fetch(
-        "http://localhost:5000/api/auth/register",
+        "https://ai-study-material-generator-xwx7.onrender.com/api/auth/register",
         {
           method: "POST",
 

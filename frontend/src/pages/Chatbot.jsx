@@ -43,7 +43,7 @@ function Chatbot() {
 
       try {
         const res = await fetch(
-          "http://localhost:5000/api/documents",
+          "https://ai-study-material-generator-xwx7.onrender.com/api/documents",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -105,7 +105,7 @@ function Chatbot() {
 
     try {
       const res = await fetch(
-        `http://localhost:5000/api/chat/${selectedDocument}`,
+        `https://ai-study-material-generator-xwx7.onrender.com/api/chat/${selectedDocument}`,
         {
           method: "POST",
 

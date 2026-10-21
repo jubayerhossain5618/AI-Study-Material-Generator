@@ -18,13 +18,13 @@ function Dashboard() {
       try {
         const [documentsResponse, materialsResponse] =
           await Promise.all([
-            fetch("http://localhost:5000/api/documents", {
+            fetch("https://ai-study-material-generator-xwx7.onrender.com/api/documents", {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
             }),
 
-            fetch("http://localhost:5000/api/ai/materials", {
+            fetch("https://ai-study-material-generator-xwx7.onrender.com/api/ai/materials", {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
