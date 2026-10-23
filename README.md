@@ -1,6 +1,6 @@
-# AI Study Material Generator
+# 📚 AI Study Material Generator
 
-An AI-powered educational platform that automatically generates study materials from uploaded documents. The system helps students save time and improve learning efficiency by generating summaries, quizzes, flashcards, MCQs, and providing AI chatbot assistance.
+An AI-powered educational platform that automatically generates study materials from uploaded documents. The system helps students save time and improve learning efficiency by generating **summaries, quizzes, flashcards, MCQs**, and providing an **AI Study Tutor / Chatbot**.
 
 ---
 
@@ -18,115 +18,161 @@ An AI-powered educational platform that automatically generates study materials 
 
 ## 👥 Team Information
 
-| Name                 | Student ID     | Role        |
-| ------------------   | ----------     | ----------- |
-| Md.Jubayer Hossain   |11230121152     | Team Leader |
-| Zemima Khan jimu     | 11230121144    | Member      |
-| Orin Khan Joty       | 11230121147    | Member      |
-| Rafiuzzaman Rafi     | 11230121154    | Member      |
+| Name | Student ID | Role |
+|---|---|---|
+| Md. Jubayer Hossain | 11230121152 | Team Leader |
+| Zemima Khan Jimu | 11230121144 | Member |
+| Orin Khan Joty | 11230121147 | Member |
+| Rafiuzzaman Rafi | 11230121154 | Member |
 
 ---
 
 ## 📖 Project Description
 
-Students often spend significant time creating notes, summaries, flashcards, and practice questions manually. Existing learning platforms provide limited automation and personalization.
+Students often spend significant time manually creating notes, summaries, flashcards, and practice questions from their study materials.
 
-The AI Study Material Generator solves this problem by allowing students to upload study materials and automatically generate:
+The **AI Study Material Generator** solves this problem by allowing students to upload their study documents and automatically generate useful learning materials using Artificial Intelligence.
 
-* Summaries
-* Multiple Choice Questions (MCQs)
-* Flashcards
-* Quizzes
-* AI-powered chatbot responses
+The system supports **PDF, DOCX, and TXT** files and can generate:
 
-This system enhances learning efficiency and reduces the time required for exam preparation.
+- 📄 Summaries
+- ❓ Multiple Choice Questions (MCQs)
+- 🃏 Flashcards
+- 📝 Quizzes
+- 🤖 AI Study Tutor / Chatbot responses
+
+The platform also provides secure user authentication, profile management, an admin dashboard, document management, and a responsive user interface.
 
 ---
 
 ## 🎯 Objectives
 
-* Automate study material generation.
-* Reduce manual note-taking effort.
-* Improve student productivity.
-* Provide AI-assisted learning support.
-* Generate personalized learning resources.
+- Automate study material generation.
+- Reduce manual note-taking effort.
+- Improve student productivity.
+- Provide AI-assisted learning support.
+- Generate personalized learning resources.
+- Help students prepare for examinations more efficiently.
 
 ---
 
 ## ✨ Features
 
-### User Features
+### 👤 User Features
 
-* User Registration
-* User Login & Authentication
-* Profile Management
-* Upload Study Documents
-* Download Generated Materials
+- User Registration
+- User Login
+- JWT Authentication
+- Secure Password Hashing
+- Profile Management
+- Upload Study Documents
+- PDF, DOCX & TXT File Support
+- Dashboard Search
+- View Generated Materials
 
-### AI Features
+### 🤖 AI Features
 
-* AI Summary Generator
-* AI MCQ Generator
-* AI Flashcard Generator
-* AI Quiz Generator
-* AI Chatbot Assistance
+- AI Summary Generator
+- AI MCQ Generator
+- AI Flashcard Generator
+- AI Quiz Generator
+- AI Study Tutor / Chatbot
+- Google Gemini API Integration
 
-### Admin Features
+### 👨‍💼 Admin Features
 
-* Manage Users
-* Manage Documents
-* Monitor System Activities
-* View Reports and Statistics
+- Admin Dashboard
+- User Management
+- Document Management
+- Dashboard Search
+- System Monitoring
+
+### 🎨 UI & System Features
+
+- Responsive User Interface
+- React-based Dashboard
+- Frontend–Backend Integration
+- MongoDB Database Integration
+- REST API
+- Error Handling
 
 ---
 
 ## 🏗️ System Architecture
 
 ```text
-Student/User
-      │
-      ▼
-Frontend (React.js)
-      │
-      ▼
-Backend API (Node.js + Express.js)
-      │
-      ├────────► MongoDB Database
-      │
-      └────────► OpenAI API 
+                         ┌───────────────────┐
+                         │   Student / User  │
+                         └─────────┬─────────┘
+                                   │
+                                   ▼
+                         ┌───────────────────┐
+                         │  React.js + Vite  │
+                         │     Frontend      │
+                         └─────────┬─────────┘
+                                   │
+                                   ▼
+                         ┌───────────────────┐
+                         │ Node.js + Express │
+                         │      Backend      │
+                         └─────────┬─────────┘
+                                   │
+                    ┌──────────────┼──────────────┐
+                    │              │              │
+                    ▼              ▼              ▼
+             ┌────────────┐ ┌────────────┐ ┌──────────────┐
+             │  MongoDB   │ │ JWT + bcrypt│ │ Gemini API   │
+             │  Database  │ │Authentication│ │     AI       │
+             └────────────┘ └────────────┘ └──────┬───────┘
+                                                   │
+                                                   ▼
+                                          ┌─────────────────┐
+                                          │ Study Materials │
+                                          ├─────────────────┤
+                                          │ • Summary       │
+                                          │ • MCQ           │
+                                          │ • Flashcards    │
+                                          │ • Quiz          │
+                                          │ • AI Tutor      │
+                                          └─────────────────┘
 ```
 
+---
 
 ## 🛠️ Technology Stack
 
 ### Frontend
-* HTML
-* React.js
-* Tailwind CSS
-* JavaScript
-  
+
+- React.js
+- Vite
+- JavaScript
+- Responsive UI
 
 ### Backend
 
-* Node.js
-* Express.js
-* JWT Authentication
+- Node.js
+- Express.js
+- REST API
+- JWT Authentication
+- bcrypt
 
 ### Database
 
-* MongoDB
+- MongoDB
 
 ### AI Integration
 
-* OpenAI API 
-
+- Google Gemini API
 
 ### Tools
 
-* Draw.io
-* DBDiagram.io
-* Figma
-* GitHub
+- Visual Studio Code
+- Figma
+- Draw.io
+- DB Diagram
+- Git
+- GitHub
+- Postman / Thunder Client
 
 ---
 
@@ -135,19 +181,33 @@ Backend API (Node.js + Express.js)
 ```text
 AI-Study-Material-Generator/
 │
-├── frontend/          # React frontend application
-├── backend/           # Node.js backend APIs
-├── database/          # Database schema and scripts
-├── documentation/     # SRS, System Design, Reports
-├── diagrams/          # UML and architecture diagrams
-├── README.md
+├── frontend/
+│   ├── src/
+│   ├── public/
+│   └── package.json
 │
-└── .gitignore
+├── backend/
+│   ├── controllers/
+│   ├── routes/
+│   ├── models/
+│   ├── middleware/
+│   ├── config/
+│   ├── server.js
+│   └── package.json
+│
+├── database/
+├── documentation/
+├── diagrams/
+├── ai/
+├── screenshots/
+│
+├── .gitignore
+└── README.md
 ```
 
 ---
 
-## 🔌 Planned API Endpoints
+## 🔌 API Endpoints
 
 ### Authentication APIs
 
@@ -182,47 +242,77 @@ POST /api/ai/quiz
 POST /api/ai/chat
 ```
 
+> **Note:** Endpoint availability may depend on the current backend implementation and route configuration.
+
 ---
 
 ## 🤖 AI Integration Workflow
 
 ```text
 User Uploads Document
-            │
-            ▼
-Backend Extracts Text
-            │
-            ▼
-OpenAI / Gemini API
-            │
-            ▼
-AI Processes Content
-            │
-            ▼
-Generate:
-• Summary
-• MCQs
-• Flashcards
-• Quiz Questions
-            │
-            ▼
-Store Results in Database
-            │
-            ▼
-Display Results to User
+          │
+          ▼
+Backend Receives Document
+          │
+          ▼
+Extract Text from Document
+          │
+          ▼
+Send Relevant Content
+to Google Gemini API
+          │
+          ▼
+Gemini AI Processes Content
+          │
+          ├───────────────┐
+          │               │
+          ▼               ▼
+       Summary          MCQs
+          │               │
+          ├───────────────┤
+          │               │
+          ▼               ▼
+     Flashcards          Quiz
+          │
+          ▼
+     AI Study Tutor
+          │
+          ▼
+Display Generated
+Materials to User
 ```
 
+---
 
+## 🔐 Authentication & Security
 
+The system uses several security mechanisms:
+
+- JWT-based authentication
+- Password hashing using bcrypt
+- Protected API routes
+- Role-based access for admin functionality
+- Environment variables for sensitive credentials
+- `.env` excluded from GitHub
+
+---
+
+## 📄 Supported File Formats
+
+| File Format | Support |
+|---|---|
+| PDF | ✅ |
+| DOCX | ✅ |
+| TXT | ✅ |
 
 ---
 
 ## ⭐ Project Status
 
-**Current Phase:** Testing & Debugging (Week 10)
+**Current Phase:** Final Presentation & Viva — Week 14  
+**Development Status:** ✅ Complete  
+**Latest Completed Phase:** Week 13 — Presentation Preparation ✅
 
-**Development Status:** Testing in Progress 🧪
-**Latest Completed Phase:** Week 9 — Feature Completion ✅
 ---
 
 ## ✅ Completed Features
@@ -241,54 +331,156 @@ Display Results to User
 - Responsive UI
 - MongoDB Database Integration
 
-- ---
-
-## 🛠️ Technology Stack
-
-- Frontend: React.js + Vite
-- Backend: Node.js + Express.js
-- Database: MongoDB
-- Authentication: JWT + bcrypt
-- AI Integration: Google Gemini API
-
-- ---
+---
 
 ## 🚀 Project Progress
 
-- Week 7 — Frontend Development ✅
-- Week 8 — AI Integration ✅
-- Week 9 — Feature Completion ✅
-- Week 10 — Testing & Debugging 🔄
-- Week 11 — Deployment ⏳
-- Week 12 — Documentation ⏳
-- Week 13 — Presentation Preparation ⏳
-- Week 14 — Final Presentation & Viva ⏳
+| Week | Phase | Status |
+|---|---|---|
+| Week 7 | Frontend Development | ✅ Completed |
+| Week 8 | AI Integration | ✅ Completed |
+| Week 9 | Feature Completion | ✅ Completed |
+| Week 10 | Testing & Debugging | ✅ Completed |
+| Week 11 | Deployment | ✅ Completed |
+| Week 12 | Documentation | ✅ Completed |
+| Week 13 | Presentation Preparation | ✅ Completed |
+| Week 14 | Final Presentation & Viva | ⏳ Current |
 
-- ---
+### 🎉 Overall Development Status: **100% Complete**
+
+---
 
 ## ▶️ How to Run the Project
 
-### Backend
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/jubayerhossain5618/AI-Study-Material-Generator.git
+cd AI-Study-Material-Generator
+```
+
+### 2. Backend Setup
+
+Navigate to the backend directory:
 
 ```bash
 cd backend
-npm install
-npm start
 ```
-cd frontend
+
+Install the required dependencies:
+
+```bash
 npm install
-npm run dev
+```
 
-Environment Variables
+Create a `.env` file inside the `backend` folder.
 
-Create a .env file inside the backend folder and add the required environment variables.
+Add the required environment variables:
+
+```env
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
 GEMINI_API_KEY=your_gemini_api_key
+```
+
+Start the backend server:
+
+```bash
+npm start
+```
 
 ---
+
+### 3. Frontend Setup
+
+Open a **new terminal** and navigate to the frontend directory:
+
+```bash
+cd frontend
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start the frontend development server:
+
+```bash
+npm run dev
+```
+
+Vite will provide the local development URL in the terminal.
+
+---
+
+## 🔑 Environment Variables
+
+The backend requires the following environment variables:
+
+| Variable | Description |
+|---|---|
+| `MONGO_URI` | MongoDB connection string |
+| `JWT_SECRET` | Secret key for JWT authentication |
+| `GEMINI_API_KEY` | Google Gemini API key |
+
+Add the following to `.gitignore`:
+
+```gitignore
+.env
+node_modules/
+```
+
+---
+
+## 🧪 Testing
+
+The system has been tested for:
+
+- User registration
+- User login
+- JWT authentication
+- Password hashing
+- File uploading
+- PDF processing
+- DOCX processing
+- TXT processing
+- AI summary generation
+- MCQ generation
+- Flashcard generation
+- Quiz generation
+- AI Study Tutor / Chatbot
+- User profile update
+- Admin dashboard
+- Dashboard search
+- MongoDB operations
+- Frontend–backend API communication
+- Responsive UI
+- Error handling
+
+---
+
+
+## 🚀 Future Improvements
+
+Although the current academic version is complete, the following features can be considered for future development:
+
+- Voice-based AI Study Tutor
+- Support for additional document formats
+- Personalized study plans
+- Student learning progress tracking
+- Advanced learning analytics
+- AI-generated explanations with references
+- Mobile application
+- More AI model options
+
+
+---
+
 ## 📄 License
 
-This project is developed for academic purposes as part of the CSE4104 – Software Development III course.
+This project is developed for **academic purposes** as part of the **CSE4104 – Software Development III** course.
 
+**© 2026 AI Study Material Generator Team**
 
